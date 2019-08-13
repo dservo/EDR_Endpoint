@@ -29,6 +29,8 @@ args:
         short: C
         multiple: false
         conflicts_with:
+            - modify
+            - delete
             - process
             - net
         requires:
@@ -38,15 +40,21 @@ args:
         short: D
         multiple: false
         conflicts_with:
+            - create
+            - modify
             - process
             - net
         requires:
             - file
     - modify:
-        help: Modify File or Reg Key/value with random data
+        help: >-
+          Modify File or Reg Key/value with random data
+          If no file modify will create one
         short: M
         multiple: false
         conflicts_with:
+            - create
+            - delete
             - process
             - net
         requires:
