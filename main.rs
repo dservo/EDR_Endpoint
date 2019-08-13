@@ -66,6 +66,7 @@ fn modify_file(path: String) -> std::io::Result<()>{
         //file.write_all("ehello")?;
         println!("UTC now is: {}", now);
         println!("Modified file: {}", path);
+        //test
     }
     Ok(())
 }
