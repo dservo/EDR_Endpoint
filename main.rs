@@ -67,8 +67,5 @@ fn modify_file(path: String) -> std::io::Result<()>{
         println!("UTC now is: {}", now);
         println!("Modified file: {}", path);
     }
-
-    //println!("Modified file: {}", path);
-    //fs::remove_file(path)?;
     Ok(())
 }
