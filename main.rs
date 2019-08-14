@@ -45,8 +45,13 @@ fn create_file(path: String) -> std::io::Result<()> {
 }
 
 fn remove_file(path: String) -> std::io::Result<()> {
-    println!("Deleted file: {}", path);
-    fs::remove_file(path)?;
+    let file_check = Path::new(&path.clone()).exists();
+    if file_check == true {
+      println!("Deleted file: {}", path);
+      fs::remove_file(path)?;
+    } else {
+      println!("{} is not a file dooning nothing" , path);
+    }
     Ok(())
 }
 
