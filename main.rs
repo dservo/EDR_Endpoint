@@ -7,7 +7,8 @@ use clap::App;
 use std::fs::{self , OpenOptions, File};
 use std::path::Path;
 use std::process::{Command, Stdio}; // self may be nedded
-use std::io::{BufRead, BufReader, Error, ErrorKind};
+use std::io::{BufRead, BufReader, Write, Error, ErrorKind}; // read notused at this time
+use std::net::TcpStream;
 
 fn main() -> std::io::Result<()>  {
     // YAML Method for CLI OPTS
@@ -33,7 +34,7 @@ fn main() -> std::io::Result<()>  {
     //Collect the Net conection information
     if matches.is_present("net") {
       let net: Vec<&str> = matches.values_of("net").unwrap().collect();
-      println!("Connection IP: {} PORT: {} File: {} ", net[0], net[1], net[2] );
+      tcp_send(net[0].to_string(), net[1].to_string(), net[2].to_string())?;
     }
     Ok(())
 } // end main
@@ -56,7 +57,6 @@ fn remove_file(path: String) -> std::io::Result<()> {
 }
 
 fn modify_file(path: String) -> std::io::Result<()> {
-    use std::io::Write;
     let now: DateTime<Utc> = Utc::now();
     let mut file_check = Path::new(&path.clone()).exists();
     if file_check == false {
@@ -82,5 +82,17 @@ fn create_prosess (path: String) -> std::io::Result<()> {
         .ok_or_else(|| Error::new(ErrorKind::Other,"Error capturing standard output."))?;
     let read_cmd_output = BufReader::new(process_output);
     read_cmd_output.lines().filter_map(|line| line.ok()).for_each(|line| println!("{}", line));
+    Ok(())
+}
+
+fn tcp_send (ip_address: String, port: String, file: String) -> std::io::Result<()> {
+    println!("Connection Information IP: {} PORT: {} File: {} ", ip_address, port, file);
+    let connection = format!("{}:{}",ip_address , port);
+    if let Ok(mut tcp_stream) = TcpStream::connect (connection.clone()) {
+        println!("Connection to server @ : {}", connection);
+        tcp_stream.write(b"hello world")?; 
+    } else {
+        println!("Error No server @: {}", connection);
+    }
     Ok(())
 }

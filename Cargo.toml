@@ -1,5 +1,5 @@
 [package]
-name = "EDR_Endpoint"
+name = "edr_endpoint"
 version = "0.1.0"
 authors = ["dcervo"]
 edition = "2018"
@@ -18,5 +18,5 @@ chrono = "0.4.7"
 
 
 [[bin]]
-name = "EDR_Endpoint"
+name = "edr_endpoint"
 path = "main.rs"
