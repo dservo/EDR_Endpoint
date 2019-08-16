@@ -1,0 +1,68 @@
+name: EDR Endpoint
+version: "1.0"
+author: Dan C.
+about: Makes noise to test EDR agent.
+args:
+    - process:
+        short: P
+        long: PROCESS
+        value_name: PROCESS_PATH
+        help: Starts an executable.
+        takes_value: true
+    - net:
+        short: N
+        long: NETSEND
+        value_names:
+          - IP_ADDRESS
+          - PORT
+          - FILE
+        help: Sends a file to server over TCP.
+        takes_value: true
+    - file:
+        short: F
+        long: FILE
+        value_name: FILE_PATH
+        help: Depending on flags will create,delete or modify.
+        takes_value: true
+    - reg:
+        short: R
+        long: RegEdit
+        value_name: REG_KEY
+        help: Depending on flags will create,delete or modify.
+        takes_value: true
+    - create:
+        help: Create File or Reg Key/value
+        short: C
+        multiple: false
+        conflicts_with:
+            - modify
+            - delete
+            - process
+            - net
+        #requires:
+        #    - file
+        #    - reg
+    - delete:
+        help: Delete File or Reg Key/value
+        short: D
+        multiple: false
+        conflicts_with:
+            - create
+            - modify
+            - process
+            - net
+        #requires:
+        #    - file
+    - modify:
+        help: >-
+          Modify File or Reg Key/value with random data
+          If no file modify will create one
+        short: M
+        multiple: false
+        conflicts_with:
+            - create
+            - delete
+            - process
+            - net
+        #requires:
+        #    - file

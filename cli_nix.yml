@@ -33,8 +33,6 @@ args:
             - delete
             - process
             - net
-        requires:
-            - file
     - delete:
         help: Delete File or Reg Key/value
         short: D
@@ -44,8 +42,6 @@ args:
             - modify
             - process
             - net
-        requires:
-            - file
     - modify:
         help: >-
           Modify File or Reg Key/value with random data
@@ -57,5 +53,3 @@ args:
             - delete
             - process
             - net
-        requires:
-            - file

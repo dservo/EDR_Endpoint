@@ -9,6 +9,8 @@ edition = "2018"
 [dependencies]
 clap = {version = "2.33.0", features = ["yaml"]}
 chrono = "0.4.7"
+
+winreg = "0.6.2"
 # other dependecies that will be neded when features are implemneted
 #log = "0.4.8"
 #
