@@ -24,12 +24,23 @@ args:
         value_name: FILE_PATH
         help: Depending on flags will create,delete or modify.
         takes_value: true
+# windows only
     - reg:
         short: R
-        long: RegEdit
-        value_name: REG_KEY
-        help: Depending on flags will create,delete or modify.
+        long: REGEDIT
+        value_name: REG_PATH
+        help: Depending on flags will create,delete or modify. Only in HKEY_CURRENT_USER
         takes_value: true
+    - value:
+        short: V
+        value_names:
+          - REG_NAME
+          - REG_VALUE
+        help: Key value to use when modifing a reg key
+        takes_value: true
+        requires:
+          - reg
+  # flags
     - create:
         help: Create File or Reg Key/value
         short: C
@@ -39,11 +50,10 @@ args:
             - delete
             - process
             - net
-        #requires:
-        #    - file
-        #    - reg
     - delete:
-        help: Delete File or Reg Key/value
+        help: >-
+           Delete File or Reg Key
+           -V option will delete reg value
         short: D
         multiple: false
         conflicts_with:
@@ -51,12 +61,10 @@ args:
             - modify
             - process
             - net
-        #requires:
-        #    - file
     - modify:
         help: >-
-          Modify File or Reg Key/value with random data
-          If no file modify will create one
+          Modify File or Reg value
+          If no file or Reg value modify will create one
         short: M
         multiple: false
         conflicts_with:
@@ -64,5 +72,3 @@ args:
             - delete
             - process
             - net
-        #requires:
-        #    - file
