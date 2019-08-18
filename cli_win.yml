@@ -15,7 +15,7 @@ args:
         value_names:
           - IP_ADDRESS
           - PORT
-          - FILE
+          - DATA
         help: Sends a file to server over TCP.
         takes_value: true
     - file:
