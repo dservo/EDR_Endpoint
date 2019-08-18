@@ -16,7 +16,7 @@ args:
           - IP_ADDRESS
           - PORT
           - DATA
-        help: Sends a file to server over TCP.
+        help: Sends string of data to server over TCP.
         takes_value: true
     - file:
         short: F

@@ -11,14 +11,18 @@ FLAGS:
 
 OPTIONS:
     -F, --FILE <FILE_PATH>                      Depending on flags will create,delete or modify.
-    -N, --NETSEND <IP_ADDRESS> <PORT> <FILE>    Sends a file to server over TCP.
+    -N, --NETSEND <IP_ADDRESS> <PORT> <DATA>    Sends string of data to server over TCP.
     -P, --PROCESS <PROCESS_PATH>                Starts an executable.
 
 
 
 
+Network:
+  will open a port and send a stream of bytes to a given destination server currently works with simple server from example [bottom of read me]
+    example edr_endpoint -N 127.0.0.1 3333 hello_world
 
-file:
+
+File:
  create - will make a file at a given path and do nothing if already exists
    example  edr_endpoint -F foo.txt -C
  modify - will append hello world to the end of a given file if no file will create one at given path
@@ -38,3 +42,55 @@ file arguments will add
 [file status] == Exists Create and No_File
 [file info]
 [cmd activity]
+
+network argument will add source and destination connection information  printed out from TcpStream and number of bytes sent
+[[tcp stream information]] [BYTES:n]
+
+
+
+
+
+[rust server example]
+
+use std::thread;
+use std::net::{TcpListener, TcpStream, Shutdown};
+use std::io::{Read, Write};
+
+fn handle_client(mut stream: TcpStream) {
+    let mut data = [0 as u8; 50]; // using 50 byte buffer
+    while match stream.read(&mut data) {
+        Ok(size) => {
+            // echo everything!
+            stream.write(&data[0..size]).unwrap();
+            true
+        },
+        Err(_) => {
+            println!("An error occurred, terminating connection with {}", stream.peer_addr().unwrap());
+            stream.shutdown(Shutdown::Both).unwrap();
+            false
+        }
+    } {}
+}
+
+fn main() {
+    let listener = TcpListener::bind("0.0.0.0:3333").unwrap();
+    // accept connections and process them, spawning a new thread for each one
+    println!("Server listening on port 3333");
+    for stream in listener.incoming() {
+        match stream {
+            Ok(stream) => {
+                println!("New connection: {}", stream.peer_addr().unwrap());
+                thread::spawn(move|| {
+                    // connection succeeded
+                    handle_client(stream)
+                });
+            }
+            Err(e) => {
+                println!("Error: {}", e);
+                /* connection failed */
+            }
+        }
+    }
+    // close the socket server
+    drop(listener);
+}
