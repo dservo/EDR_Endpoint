@@ -2,9 +2,11 @@
 A simple program to help make active noise on a machine to test detection methods. program can run from command line or used in a script such as bash. Programm can Create, modify and delete files and on Windows manipulate registry KEYs and values. Program can also create network trafic and start processes all activity by the programm is logged in TSV file located where the programm runs from. use cargo to build
 
 ######USAGE:
+
     **edr_endpoint [FLAGS] [OPTIONS]**
 
 ######FLAGS:
+
     **-C**               Create File or Reg Key/value
     **-D**               Delete File or Reg Key/value
     **-h, --help**       Prints help information
@@ -12,55 +14,76 @@ A simple program to help make active noise on a machine to test detection method
     **-V, --version**    Prints version information
 
 ######OPTIONS:
+
     **-F, --FILE <FILE_PATH>**                      Depending on flags will create, delete or modify.
     **-N, --NETSEND <IP_ADDRESS>  <PORT> <DATA>**    Sends string of data to server over TCP.
     **-P, --PROCESS <PROCESS_PATH>**                 Starts an executable.
 
 ######Network:
+
  Will open a port and send a stream of bytes to a given destination server currently works with simple server from example [bottom of read me]
+ 
     **example** edr_endpoint -N 127.0.0.1 3333 hello_world
 
 ##File:
- create - will make a file at a given path and do nothing if already exists
+
+ **create** - will make a file at a given path and do nothing if already exists
+ 
    **example**  *edr_endpoint -F foo.txt -C*
- modify - will append hello world to the end of a given file if no file will create one at given path
+   
+ **modify** - will append hello world to the end of a given file if no file will create one at given path
    **example**  *edr_endpoint -F foo.txt -M*
- delete - will delete a given file
+ **delete** - will delete a given file
    **example**  *edr_endpoint -F foo.txt -d*
 
 ##Process:
+
   Will start an external command or exe and forward arguments to new process.
   to forward add ": before the arguments section and a " after
   null arguments simply use ":"
     **example**  *edr_endpoint -P ls ":-a"*
 
 ##[windows only]
+
 ##Registry:
+
   will create or delete a registry key in HKEY_CURRENT_USER also can Modify and delete key values
   modify will create a key if one is not present already. values only creates and modifies  REG_SZ values
   **create key-**
+  
     **example**  edr_endpoint -R \foo\bar -C
+    
  **delete key-**
+ 
     **example**  edr_endpoint -R \foo\bar -D
+    
     [use caution program will crash if value is not present]
+    
   **modify/create value -**
+  
     **example**  *edr_endpoint -R \foo\bar -V Hello world -M*
+    
   **delete value -**
+  
     **example**  *edr_endpoint -R \foo\bar -V Hello * -D*  **[use wild card as second argument]**
+    
       **[use caution program will crash if value is not present]**
 
 
 
 ##logging: 
+
 every time the program successfully runs will append a new event
 to edr_endpoint_log.tsv in the directory that the program is run from.
 
 every log event begins with
+
 [time stamp] [username] [pid] [full program path] [[cli arguments]] [requested cmd]
 every log event ends with EOE - End Of Event
 
 
 file arguments will add
+
 [file status] == Exists Create and No_File
 [file info]
 [cmd activity]
@@ -70,6 +93,7 @@ network argument will add source and destination connection information  printed
 
 
 ####[todo]
+
 format readme
 figure out multiple file source to split things up better
 explore yml file (concat) to save on double edits
@@ -78,6 +102,7 @@ fix all debug formatters
 
 
 ##[rust server example]
+
 
 use std::thread;
 use std::net::{TcpListener, TcpStream, Shutdown};
