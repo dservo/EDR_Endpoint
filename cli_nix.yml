@@ -6,8 +6,12 @@ args:
     - process:
         short: P
         long: PROCESS
-        value_name: PROCESS_PATH
-        help: Starts an executable.
+        value_names:
+          - PROCESS_PATH
+          - PROCESS_ARGS
+        help: >-
+          Starts an executable. TO pass args suround with ": <newprosess args>"
+          to send no arguments just send ":"
         takes_value: true
     - net:
         short: N

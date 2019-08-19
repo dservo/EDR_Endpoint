@@ -1,0 +1,19 @@
+[this file is for code that wold like to explore more]
+
+
+
+fn create_prosess(path: String, args: String) -> std::io::Result<()> {
+let process_output = Command::new(path.clone())
+    .args(&[args]) // todo:play with args() instead to pass from cli interface
+    .stdout(Stdio::piped())
+    .spawn()?
+    .stdout
+    .ok_or_else(|| Error::new(ErrorKind::Other, "Error capturing standard output."))?;
+
+let read_cmd_output = BufReader::new(process_output);
+read_cmd_output
+    .lines()
+    .filter_map(|line| line.ok())
+    .for_each(|line| println!("{}", line));
+    Ok(())
+}

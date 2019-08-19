@@ -47,7 +47,12 @@ network argument will add source and destination connection information  printed
 [[tcp stream information]] [BYTES:n]
 
 
-
+[todo]
+format readme
+figure out multiple file source to split things up better
+explore yml file (concat) to save on double edits
+recursive calling of this program has fun with log event
+fix all debug formatters
 
 
 [rust server example]

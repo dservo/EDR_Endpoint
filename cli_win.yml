@@ -6,7 +6,9 @@ args:
     - process:
         short: P
         long: PROCESS
-        value_name: PROCESS_PATH
+        value_names:
+          - PROCESS_PATH
+          - PROCESS_ARGS
         help: Starts an executable.
         takes_value: true
     - net:

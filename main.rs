@@ -2,6 +2,7 @@
 extern crate clap;
 extern crate chrono;
 extern crate whoami;
+extern crate which;
 
 #[cfg(target_os = "windows")]
 extern crate winreg;
@@ -9,10 +10,11 @@ extern crate winreg;
 use chrono::Utc;
 use clap::App;
 use std::fs::{self, File, OpenOptions};
-use std::io::{BufRead, BufReader, Error, ErrorKind, Write};
-use std::process::{self, Command, Stdio};
+use std::io::Write;
+use std::process::{self, Command};
 use std::{env, net::TcpStream, path::Path};
 use whoami::*;
+use which::which;
 
 static LOG_FILE: &str = "edr_endpoint_log.tsv";
 
@@ -35,8 +37,8 @@ fn main() -> std::io::Result<()> {
     // get values for option supplied from command line or fall to default
     if matches.is_present("process") {
         log_entry_append("Process".to_string())?;
-        let process = matches.value_of("process").unwrap_or("default");
-        create_prosess(process.to_string())?;
+        let process: Vec<&str> = matches.values_of("process").unwrap().collect();
+        create_prosess(process[0].to_string(), process[1].to_string())?;
     }
     if matches.is_present("file") {
         log_entry_append("File".to_string())?;
@@ -62,7 +64,7 @@ fn main() -> std::io::Result<()> {
     }
     #[cfg(target_os = "windows")]
     win_cli(matches)?;
-    log_entry_finnish()?;
+    log_entry_finish()?;
     Ok(())
 } // end main
 
@@ -184,26 +186,24 @@ fn log_entry_append(log_data: String) -> std::io::Result<()> {
     Ok(())
 }
 
-fn log_entry_finnish() -> std::io::Result<()> {
+fn log_entry_finish() -> std::io::Result<()> {
     let log = LOG_FILE.to_string();
     let mut file = OpenOptions::new().append(true).open(log.clone()).unwrap();
     writeln!(file, "EOE")?;
     Ok(())
 }
 
-fn create_prosess(path: String) -> std::io::Result<()> {
-    println!("Running command: {}", path);
+fn create_prosess(path: String, args: String) -> std::io::Result<()> {
+    let args = args.replace(&['\"', ':'][..], "");
+     //clippy gives error here or ok() expect() reaserch furthur to fix
     let process_output = Command::new(path.clone())
-        //.arg("--help") // todo:play with args() instead to pass from cli interface
-        .stdout(Stdio::piped())
-        .spawn()?
-        .stdout
-        .ok_or_else(|| Error::new(ErrorKind::Other, "Error capturing standard output."))?;
-    let read_cmd_output = BufReader::new(process_output);
-    read_cmd_output
-        .lines()
-        .filter_map(|line| line.ok())
-        .for_each(|line| println!("{}", line));
+        .args(&[args])
+        .spawn()
+        .ok()
+        .expect("Failed to execute.");
+    let result = which(path).unwrap();
+    log_entry_append(format!("{:?}", result))?;
+    log_entry_append(format!("{}", process_output.id()))?;
     Ok(())
 }
 

@@ -37,3 +37,19 @@
 [2019-08-18 22:34:05.155956481 UTC]	dcervo	108619	"/home/dcervo/git/EDR_Endpoint/target/debug/edr_endpoint"	["target/debug/edr_endpoint", "-N", "127.0.0.1", "3333", "hello"]	Network	[TcpStream { addr: V4(127.0.0.1:50260), peer: V4(127.0.0.1:3333), fd: 4 }]	EOE
 [2019-08-18 22:34:24.934366811 UTC]	dcervo	108646	"/home/dcervo/git/EDR_Endpoint/target/debug/edr_endpoint"	["target/debug/edr_endpoint", "-N", "127.0.0.1", "3333", "hello"]	Network	[TcpStream { addr: V4(127.0.0.1:50264), peer: V4(127.0.0.1:3333), fd: 4 }]	EOE
 [2019-08-18 22:36:38.681774004 UTC]	dcervo	108907	"/home/dcervo/git/EDR_Endpoint/target/debug/edr_endpoint"	["target/debug/edr_endpoint", "-N", "127.0.0.1", "3333", "hellodkhfdkhfdk"]	Network	[TcpStream { addr: V4(127.0.0.1:50270), peer: V4(127.0.0.1:3333), fd: 4 }]	BYTES:15	EOE
+[2019-08-18 23:34:47.030146033 UTC]	dcervo	112408	"/home/dcervo/git/EDR_Endpoint/target/debug/edr_endpoint"	["target/debug/edr_endpoint", "-P", "target/debug/edr_endpoint"]	Process	EOE
+[2019-08-18 23:35:05.221595809 UTC]	dcervo	112417	"/home/dcervo/git/EDR_Endpoint/target/debug/edr_endpoint"	["target/debug/edr_endpoint", "-P", "target/debug/edr_endpoint"]	Process	EOE
+[2019-08-18 23:43:59.729742594 UTC]	dcervo	112985	"/home/dcervo/git/EDR_Endpoint/target/debug/edr_endpoint"	["target/debug/edr_endpoint", "-P", "target/debug/edr_endpoint", "hello"]	Process	EOE
+[2019-08-18 23:44:51.048921286 UTC]	dcervo	113008	"/home/dcervo/git/EDR_Endpoint/target/debug/edr_endpoint"	["target/debug/edr_endpoint", "-P", "target/debug/edr_endpoint", "|-H"]	Process	EOE
+[2019-08-18 23:45:08.814240848 UTC]	dcervo	113016	"/home/dcervo/git/EDR_Endpoint/target/debug/edr_endpoint"	["target/debug/edr_endpoint", "-P", "target/debug/edr_endpoint", "|-H  -P"]	Process	EOE
+[2019-08-19 00:12:51.322644728 UTC]	dcervo	114682	"/home/dcervo/git/EDR_Endpoint/target/debug/edr_endpoint"	["target/debug/edr_endpoint", "-P", "target/debug/edr_endpoint", "|-H  -P"]	Process	EOE
+[2019-08-19 00:23:33.704268969 UTC]	dcervo	115287	"/home/dcervo/git/EDR_Endpoint/target/debug/edr_endpoint"	["target/debug/edr_endpoint", "-P", "target/debug/edr_endpoint", "|-F hello.txt -C"]	Process	EOE
+[2019-08-19 00:25:02.011489748 UTC]	dcervo	115320	"/home/dcervo/git/EDR_Endpoint/target/debug/edr_endpoint"	["target/debug/edr_endpoint", "-P", "target/debug/edr_endpoint", ":-F hello.txt -C"]	Process	[2019-08-19 00:25:02.057173133 UTC]	dcervo	115384	"/home/dcervo/git/EDR_Endpoint/target/debug/edr_endpoint"	["target/debug/edr_endpoint", "-F hello.txt -C"]	File	Nothing_Done	EOE
+EOE
+[2019-08-19 00:37:05.369213314 UTC]	dcervo	115915	"/home/dcervo/git/EDR_Endpoint/target/debug/edr_endpoint"	["target/debug/edr_endpoint", "-P", "target/debug/edr_endpoint", ":-F hello.txt -C"]	Process	EOE
+[2019-08-19 00:38:20.817092001 UTC]	dcervo	116017	"/home/dcervo/git/EDR_Endpoint/target/debug/edr_endpoint"	["target/debug/edr_endpoint", "-P", "target/debug/edr_endpoint", ":-F hello.txt -C"]	Process	EOE
+[2019-08-19 00:38:20.837723949 UTC]	dcervo	116019	"/home/dcervo/git/EDR_Endpoint/target/debug/edr_endpoint"	["target/debug/edr_endpoint", "-F hello.txt -C"]	File	Nothing_Done	EOE
+[2019-08-19 00:56:27.839114533 UTC]	dcervo	117234	"/home/dcervo/git/EDR_Endpoint/target/debug/edr_endpoint"	["target/debug/edr_endpoint", "-P", "target/debug/edr_endpoint", ":-F hello.txt -C"]	Process	EOE
+[2019-08-19 00:56:27.872343375 UTC]	dcervo	117236	"/home/dcervo/git/EDR_Endpoint/target/debug/edr_endpoint"	["target/debug/edr_endpoint", "-F hello.txt -C"]	File	Nothing_Done	EOE
+[2019-08-19 01:02:09.799864454 UTC]	dcervo	117851	"/home/dcervo/git/EDR_Endpoint/target/debug/edr_endpoint"	["target/debug/edr_endpoint", "-P", "target/debug/edr_endpoint", ":-F hello.txt -C"]	Process	"/home/dcervo/git/EDR_Endpoint/target/debug/edr_endpoint"	117926	EOE
+[2019-08-19 01:02:09.819336718 UTC]	dcervo	117926	"/home/dcervo/git/EDR_Endpoint/target/debug/edr_endpoint"	["target/debug/edr_endpoint", "-F hello.txt -C"]	File	Nothing_Done	EOE
