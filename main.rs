@@ -1,8 +1,8 @@
 #[macro_use]
 extern crate clap;
 extern crate chrono;
-extern crate whoami;
 extern crate which;
+extern crate whoami;
 
 #[cfg(target_os = "windows")]
 extern crate winreg;
@@ -13,8 +13,8 @@ use std::fs::{self, File, OpenOptions};
 use std::io::Write;
 use std::process::{self, Command};
 use std::{env, net::TcpStream, path::Path};
-use whoami::*;
 use which::which;
+use whoami::*;
 
 static LOG_FILE: &str = "edr_endpoint_log.tsv";
 
@@ -68,20 +68,24 @@ fn main() -> std::io::Result<()> {
     Ok(())
 } // end main
 
+// window cli commands for ease of editing and conditinal compilation
 #[cfg(target_os = "windows")]
 fn win_cli(matches: clap::ArgMatches) -> std::io::Result<()> {
     if matches.is_present("reg") {
-        log_entry_append(format!("Regristry"))?;
+        log_entry_append("Registry".to_string())?;
         let reg_path = matches.value_of("reg").unwrap_or("Software\\default");
         if matches.is_present("create") {
             create_winreg_key(reg_path.to_string())?;
+            log_entry_append("Create".to_string())?;
         } else if matches.is_present("delete") {
             if !matches.is_present("value") {
                 remove_winreg_key(reg_path.to_string())?;
+                log_entry_append("Delete".to_string())?;
             } else {
-                // bit clunky on this overridden delete but scopeing needs some work
+                // bit clunky on this overridden delete but scope needs some work
                 let reg_value: Vec<&str> = matches.values_of("value").unwrap().collect();
                 delete_winreg_value(reg_path.to_string(), reg_value[0].to_string())?;
+                log_entry_append("Delete".to_string())?;
             }
         } else if matches.is_present("modify") {
             if matches.is_present("value") {
@@ -91,6 +95,7 @@ fn win_cli(matches: clap::ArgMatches) -> std::io::Result<()> {
                     reg_value[0].to_string(),
                     reg_value[1].to_string(),
                 )?;
+                log_entry_append("Modify".to_string())?;
             } else {
                 println!(
                     "error: The argument --REGEDIT with flag -M requires -V
@@ -98,7 +103,7 @@ fn win_cli(matches: clap::ArgMatches) -> std::io::Result<()> {
                 );
             }
         } else {
-            log_entry_append(format!("Nothing_Done"))?;
+            log_entry_append("Nothing_Done".to_string())?;
         }
     }
     Ok(())
@@ -117,7 +122,7 @@ fn create_file(path: String) -> std::io::Result<()> {
     if !check_file(path.clone()) {
         log_entry_append("Create".to_string())?;
         let file = File::create(path)?;
-        //till printing elements of a strucures is fully understoon debug drived formant will do
+        //till printing elements of a strucures is fully understoon debug drived formant will have todo
         log_entry_append(format!("{:?}", file))?;
     } else {
         log_entry_append("Exists".to_string())?;
@@ -195,7 +200,7 @@ fn log_entry_finish() -> std::io::Result<()> {
 
 fn create_prosess(path: String, args: String) -> std::io::Result<()> {
     let args = args.replace(&['\"', ':'][..], "");
-     //clippy gives error here or ok() expect() reaserch furthur to fix
+    //clippy gives error here or ok() expect() reaserch furthur to fix
     let process_output = Command::new(path.clone())
         .args(&[args])
         .spawn()
@@ -221,51 +226,54 @@ fn tcp_send(ip_address: String, port: String, data: String) -> std::io::Result<(
 // not implemneted yet, modify a key name appears to not be built into the winap
 // would need to read and create all values in a key and any sub keys in new key
 // then delet old key  [SHOULD ADD LATER]
-
 #[cfg(target_os = "windows")]
 fn create_winreg_key(path: String) -> std::io::Result<()> {
+    log_entry_append("KEY".to_string())?;
     // only going to use HKEY_CURRENT_USER atm for simpliity and premmisions
     let hkcu = RegKey::predef(HKEY_CURRENT_USER);
     let reg_path = Path::new(&path);
     let (_key, disp) = hkcu.create_subkey(&reg_path)?;
     match disp {
-        REG_CREATED_NEW_KEY => println!("Created Key {}", &path),
-        REG_OPENED_EXISTING_KEY => println!("Key already exists {}", &path),
+        REG_CREATED_NEW_KEY => log_entry_append("Create".to_string())?,
+        REG_OPENED_EXISTING_KEY => log_entry_append("Exists".to_string())?,
     }
+    log_entry_append(format!("[HKEY_CURRENT_USER\\{}]", path))?;
     Ok(())
 }
 
 // study passing variable more to create a fn of open key
 // will break if key is not there but need to look into how to check for this condition
 // the panic! from the crate exsample does not work as gracefull as I would like
-
 #[cfg(target_os = "windows")]
 fn remove_winreg_key(path: String) -> std::io::Result<()> {
+    log_entry_append("KEY".to_string())?;
     let hkcu = RegKey::predef(HKEY_CURRENT_USER);
     let reg_path = Path::new(&path);
     hkcu.open_subkey_with_flags(&reg_path, KEY_WRITE)?;
     hkcu.delete_subkey_all(&reg_path)?;
+    log_entry_append(format!("[HKEY_CURRENT_USER\\{}]", path))?;
     Ok(())
 }
 
 // Currently only working with REG_SZ
-
 #[cfg(target_os = "windows")]
 fn modify_winreg_value(path: String, name: String, value: String) -> std::io::Result<()> {
-    println!("test");
+    log_entry_append("Value".to_string())?;
     let hkcu = RegKey::predef(HKEY_CURRENT_USER);
     let reg_path = Path::new(&path);
     let key = hkcu.open_subkey_with_flags(&reg_path, KEY_WRITE)?;
-    key.set_value(name, &value)?;
+    key.set_value(name.clone(), &value)?;
+    log_entry_append(format!("[HKEY_CURRENT_USER\\{}]\t{}={}", path, name, value))?;
     Ok(())
 }
 
 #[cfg(target_os = "windows")]
 fn delete_winreg_value(path: String, name: String) -> std::io::Result<()> {
-    println!("test");
+    log_entry_append("Value".to_string())?;
     let hkcu = RegKey::predef(HKEY_CURRENT_USER);
     let reg_path = Path::new(&path);
     let key = hkcu.open_subkey_with_flags(&reg_path, KEY_WRITE)?;
     key.delete_value(&name)?;
+    log_entry_append(format!("[HKEY_CURRENT_USER\\{}]\t{}", path, name))?;
     Ok(())
 }

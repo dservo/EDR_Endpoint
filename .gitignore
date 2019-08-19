@@ -17,3 +17,4 @@ Cargo.lock
 
 /target
 #**/*.rs.bk
+edr_endpoint_log.tsv
