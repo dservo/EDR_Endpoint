@@ -1,11 +1,11 @@
 # EDR_Endpoint
 A simple program to help make active noise on a machine to test detection methods. program can run from command line or used in a script such as bash. Programm can Create, modify and delete files and on Windows manipulate registry KEYs and values. Program can also create network trafic and start processes all activity by the programm is logged in TSV file located where the programm runs from. use cargo to build
 
-######USAGE:
+###### USAGE:
 
     **edr_endpoint [FLAGS] [OPTIONS]**
 
-######FLAGS:
+###### FLAGS:
 
     **-C**               Create File or Reg Key/value
     **-D**               Delete File or Reg Key/value
@@ -13,13 +13,13 @@ A simple program to help make active noise on a machine to test detection method
     **-M**               Modify File or Reg Key/value with random data If no file modify will create one
     **-V, --version**    Prints version information
 
-######OPTIONS:
+###### OPTIONS:
 
     **-F, --FILE <FILE_PATH>**                      Depending on flags will create, delete or modify.
     **-N, --NETSEND <IP_ADDRESS>  <PORT> <DATA>**    Sends string of data to server over TCP.
     **-P, --PROCESS <PROCESS_PATH>**                 Starts an executable.
 
-######Network:
+###### Network:
 
  Will open a port and send a stream of bytes to a given destination server currently works with simple server from example [bottom of read me]
  
@@ -36,16 +36,16 @@ A simple program to help make active noise on a machine to test detection method
  **delete** - will delete a given file
    **example**  *edr_endpoint -F foo.txt -d*
 
-##Process:
+## Process:
 
   Will start an external command or exe and forward arguments to new process.
   to forward add ": before the arguments section and a " after
   null arguments simply use ":"
     **example**  *edr_endpoint -P ls ":-a"*
 
-##[windows only]
+## [windows only]
 
-##Registry:
+## Registry:
 
   will create or delete a registry key in HKEY_CURRENT_USER also can Modify and delete key values
   modify will create a key if one is not present already. values only creates and modifies  REG_SZ values
@@ -71,7 +71,7 @@ A simple program to help make active noise on a machine to test detection method
 
 
 
-##logging: 
+## logging: 
 
 every time the program successfully runs will append a new event
 to edr_endpoint_log.tsv in the directory that the program is run from.
@@ -92,7 +92,7 @@ network argument will add source and destination connection information  printed
 [[tcp stream information]] [BYTES:n]
 
 
-####[todo]
+#### [todo]
 
 format readme
 figure out multiple file source to split things up better
@@ -101,48 +101,48 @@ recursive calling of this program has fun with log event
 fix all debug formatters
 
 
-##[rust server example]
+## [rust server example]
 
 
-use std::thread;
-use std::net::{TcpListener, TcpStream, Shutdown};
-use std::io::{Read, Write};
-
-fn handle_client(mut stream: TcpStream) {
-    let mut data = [0 as u8; 50]; // using 50 byte buffer
-    while match stream.read(&mut data) {
-        Ok(size) => {
-            // echo everything!
-            stream.write(&data[0..size]).unwrap();
-            true
-        },
-        Err(_) => {
-            println!("An error occurred, terminating connection with {}", stream.peer_addr().unwrap());
-            stream.shutdown(Shutdown::Both).unwrap();
-            false
-        }
-    } {}
-}
-
-fn main() {
-    let listener = TcpListener::bind("0.0.0.0:3333").unwrap();
-    // accept connections and process them, spawning a new thread for each one
-    println!("Server listening on port 3333");
-    for stream in listener.incoming() {
-        match stream {
-            Ok(stream) => {
-                println!("New connection: {}", stream.peer_addr().unwrap());
-                thread::spawn(move|| {
-                    // connection succeeded
-                    handle_client(stream)
-                });
-            }
-            Err(e) => {
-                println!("Error: {}", e);
-                /* connection failed */
-            }
-        }
-    }
-    // close the socket server
-    drop(listener);
-}
+> use std::thread;
+> use std::net::{TcpListener, TcpStream, Shutdown};
+> use std::io::{Read, Write};
+> 
+> fn handle_client(mut stream: TcpStream) {
+>     let mut data = [0 as u8; 50]; // using 50 byte buffer
+>     while match stream.read(&mut data) {
+>         Ok(size) => {
+>             // echo everything!
+>             stream.write(&data[0..size]).unwrap();
+>             true
+>         },
+>         Err(_) => {
+>             println!("An error occurred, terminating connection with {}", stream.peer_addr().unwrap());
+>             stream.shutdown(Shutdown::Both).unwrap();
+>             false
+>         }
+>     } {}
+> }
+> 
+> fn main() {
+>     let listener = TcpListener::bind("0.0.0.0:3333").unwrap();
+>     // accept connections and process them, spawning a new thread for each one
+>     println!("Server listening on port 3333");
+>     for stream in listener.incoming() {
+>         match stream {
+>             Ok(stream) => {
+>                 println!("New connection: {}", stream.peer_addr().unwrap());
+>                 thread::spawn(move|| {
+>                     // connection succeeded
+>                     handle_client(stream)
+>                 });
+>             }
+>             Err(e) => {
+>                 println!("Error: {}", e);
+>                 /* connection failed */
+>             }
+>        }
+>     }
+>     // close the socket server
+>     drop(listener);
+> }
